@@ -1,11 +1,46 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="--background: #d4a4db">
     <ion-title>
-      Tab One
+        หน้าหลัก  
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    Hello
+<ion-content padding>
+    <div class="text-right">{{ timeString }}</div>
+  <div class="row">
+      
+    <div class="col text-left">
+      <h3>สถานะ : {{ status ? "เปิด" : "ปิด" }}</h3>
+    </div>
+    <div class="col text-right">
+      <ion-toggle color="danger" [(ngModel)]="status"></ion-toggle>
+    </div>
+  </div>
+
+  <div class="text-center">
+      <ngx-gauge
+        [type]="'full'"
+        [value]="temp"
+        [label]="'อุณหภูมิ'"
+        [append]="'ํC'"
+      >
+      </ngx-gauge>
+      <ngx-gauge
+        [type]="'full'"
+        [value]="hum"
+        [label]="'ความชื้น'"
+        [append]="' %'"
+      >
+      </ngx-gauge>
+  </div>
+
+  <ion-item lines="full">
+    <ion-label>ตั้งเวลา</ion-label>
+    <ion-datetime
+      displayFormat="HH:mm"
+      (ionChange)="getTime(timeSelect.value)"
+      #timeSelect
+    ></ion-datetime>
+  </ion-item>
 </ion-content>
