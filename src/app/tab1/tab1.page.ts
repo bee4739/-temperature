@@ -17,10 +17,24 @@ export class Tab1Page {
     this.timeNow();
     this.Init();
   }
+  public switch(){
+    microgear.publish("/cpe/switch", `${this.status}`);
+  }
 
   public Init(){
+
+
     microgear.on('connected', () => {
+      microgear.subscribe("/cpe/+");
       console.log("เชื่อมต่อสำเร็จ");
+    });
+
+    microgear.on("message", (topic:string,msg:string) => {
+      if (topic == "/APPIONIC/cpe/dht"){
+        this.temp = msg.split(",")[0];
+        this.hum = msg.split(",")[1];
+      }
+      console.log(`${topic} -> ${msg.split(",")[0]}`);
     });
 
     microgear.on('present', (event: any) => {
@@ -34,7 +48,8 @@ export class Tab1Page {
 
   public getTime(time){
     let dt = new Date(time)
-    console.log(dt.getHours() + " " + dt.getMinutes());
+    //console.log(dt.getHours() + " " + dt.getMinutes());
+    microgear.publish("/cpe/time", `${dt.getHours()}:${dt.getMinutes()}`);
   }
   public timeNow(){
     setInterval(()=>{
